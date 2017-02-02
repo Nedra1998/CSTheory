@@ -275,7 +275,7 @@ void InitializeDFA() {
 int main(int argc, char const *argv[]) {
   appareo::InitializeAppareo();
   InitializeWindow();
-  windows[0].CreateWindow("Deterministic Finite Automaton", scrwidth - 4,
+  windows[0].CreateWindow("Non-Deterministic Finite Automaton", scrwidth - 4,
                           scrheight - 4, -1, -1, true, true);
   out::BindWindow(0);
   std::string action = "Quit[q] | Delta[d] | New DFA[n]";
