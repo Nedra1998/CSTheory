@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int alphabet[128];
@@ -11,8 +11,7 @@ int alphabet[128];
  * void construct_trans_table()
  * */
 
-
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
   char *file_contents;
   long int input_file_size;
   FILE *input_file = fopen(argv[1], "rb");
@@ -22,30 +21,31 @@ int main(int argc, char *argv[]){
   file_contents = malloc(input_file_size * (sizeof(char)));
   fread(file_contents, sizeof(char), input_file_size, input_file);
   fclose(input_file);
-  file_contents[input_file_size]='\0';
+  file_contents[input_file_size] = '\0';
   char *word = argv[2];
   char trans_table[100][128];
-  for(int i = 0; i < 128;i++){
+  for (int i = 0; i < 128; i++) {
     alphabet[i] = 0;
   }
-
+  for (int i = 0; i < 2; i++) {
+    alphabet[0]++;
+  }
   int flag = 0;
-  int k;
   printf("\"");
-  for(k = 0;k<input_file_size;k++){
-    if(file_contents[k] == '\n'){
+  for (int k = 0; k < input_file_size; k++) {
+    if (file_contents[k] == '\n') {
       printf("\"");
       flag = 1;
     }
     printf("%c", file_contents[k]);
   }
-  if(flag == 0){
+  if (flag == 0) {
     printf("\"");
   }
   printf("\n");
 
-  //DO STUFF HERE
-  
+  // DO STUFF HERE
+
   int count = 0;
   printf("The special word \"%s\" appaears %i times.\n", word, count);
 }

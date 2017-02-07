@@ -6,6 +6,5 @@ extern bool outputwinb, scriptwinb, deltawindfab, deltawinndfab;
 void Init();
 void Loop();
 void New();
-void GetDelta();
 }
 #endif
