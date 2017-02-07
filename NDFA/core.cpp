@@ -10,55 +10,9 @@ std::vector<std::string> states;
 std::vector<std::string> successstates;
 std::vector<char> language;
 std::string startingstate = "0";
-std::vector<std::vector<std::string>> delta;
+std::vector<std::vector<std::vector<std::string>>> delta;
+std::vector<std::vector<std::string>> strdelta;
 double countgood = 0, totalcount = 0;
-
-bool SysCheck(std::string str) {
-  /*
-    // Binary number divisible by three
-    int val = 0;
-    for (int i = str.size() - 1; i >= 0; i--) {
-      if (str[i] == '1') {
-        val += pow(2, str.size() - i);
-      }
-    }
-    if (val % 3 == 0) {
-      return (true);
-    }
-    return (false);*/
-  /*
-  // Contains 2 + 0, 1 and no 0101
-  int zc = 0, oc = 0;
-  for (int i = 0; i < str.size(); i++) {
-    if (str[i] == '1') {
-      oc++;
-    } else {
-      zc++;
-    }
-  }
-  if (zc < 2 || oc < 2) {
-    return (false);
-  }
-  for (int i = 0; i < str.size() - 4; i++) {
-    if (str[i] == '0' && str[i + 1] == '1' && str[i + 2] == '0' &&
-        str[i + 3] == '1') {
-      return (true);
-    }
-  }
-  return(false);
-  */
-  ///*
-  //2nd RHS is a '1'
-  for(int i = 0; i < str.size();i++){
-	  if(i == str.size() - 2 && str[i] == '1'){
-		  return(true);
-	  }
-  }
-  return(false);
-  //*/
-
-
-}
 
 int FindStateIndex(std::string str) {
   for (int i = 0; i < states.size(); i++) {
@@ -123,7 +77,7 @@ void Test() {
     int currentstate = FindStateIndex(startingstate);
     for (int j = 0; j < str.size(); j++) {
       currentstate =
-          FindStateIndex(delta[currentstate][FindLanguageIndex(str[j])]);
+          FindStateIndex(strdelta[currentstate][FindLanguageIndex(str[j])]);
     }
     bool good = false;
     for (int j = 0; j < successstates.size(); j++) {
@@ -136,16 +90,6 @@ void Test() {
     } else {
       str += "->FALSE";
     }
-    //if (SysCheck(str) != good) {
-    //  if (good == true) {
-    //    str += ":FALSE";
-    //  } else {
-    //    str += ":TRUE";
-    //  }
-    //  out::SetAtt({out::BOLD});
-    //} else {
-    //  countgood++;
-    //}
     countgood++;
     totalcount++;
     out::Print(str, rowcount, 1);
@@ -154,10 +98,29 @@ void Test() {
   }
 }
 
+void ConvertDelta() {
+  strdelta.clear();
+  std::vector<std::string> newstates;
+  bool genorating = true;
+  std::string strcurrentstate = startingstate;
+  while (genorating == true) {
+    newstates.push_back(strcurrentstate);
+    std::vector<std::string> transitions;
+    int stateindex = FindStateIndex(strcurrentstate);
+    for (int i = 0; i < language.size(); i++) {
+      std::string newstate = "";
+      for (int j = 0; j < delta[stateindex][j].size(); j++) {
+        newstate += delta[stateindex][i][j];
+      }
+      // CHECK STATE EXISTS IF NOT CREATE NEW STATE!
+    }
+  }
+}
+
 void GetDelta() {
   int x = 0, y = 0;
-  int xsize = (scrwidth-10)/language.size();
-  int ysize = (scrheight-10)/states.size();
+  int xsize = (scrwidth - 10) / language.size();
+  int ysize = (scrheight - 10) / states.size();
   int input = 0;
   InitializeWindow();
   windows[1].CreateWindow("Delta Table", scrwidth - 10, scrheight - 10, -1, -1,
@@ -167,20 +130,21 @@ void GetDelta() {
     std::string str = "";
     for (int i = 0; i < language.size(); i++) {
       str += language[i];
-      out::Print(str, 1, (i + 1) * xsize + 1 - (xsize/2), 1);
+      out::Print(str, 1, (i + 1) * xsize + 1 - (xsize / 2), 1);
       str = "";
     }
     for (int i = 0; i < states.size(); i++) {
       str = states[i];
-      out::Print(str, (i + 1) * ysize + 1-(ysize/2), 1, 1);
+      out::Print(str, (i + 1) * ysize + 1 - (ysize / 2), 1, 1);
     }
-    for (int i = 0; i < delta.size(); i++) {
-      for (int j = 0; j < delta[i].size(); j++) {
-        str = delta[i][j];
+    for (int i = 0; i < strdelta.size(); i++) {
+      for (int j = 0; j < strdelta[i].size(); j++) {
+        str = strdelta[i][j];
         if (i == y && j == x) {
           out::SetAtt({out::STANDOUT}, 1);
         }
-        out::Print(str, (i + 1) * ysize + 1-(ysize/2), (j + 1) * xsize + 1-(xsize/2), 1);
+        out::Print(str, (i + 1) * ysize + 1 - (ysize / 2),
+                   (j + 1) * xsize + 1 - (xsize / 2), 1);
         if (i == y && j == x) {
           out::SetAtt({out::NORMAL}, 1);
         }
@@ -204,12 +168,30 @@ void GetDelta() {
         x++;
       }
     } else if (input == KEY_BACKSPACE) {
-      if (delta[y][x].size() > 0) {
-        delta[y][x].pop_back();
+      if (strdelta[y][x].size() > 0) {
+        strdelta[y][x].pop_back();
       }
     } else if (input != 10) {
-      delta[y][x] += char(input);
+      strdelta[y][x] += char(input);
     }
+  }
+  for (int i = 0; i < strdelta.size(); i++) {
+    std::vector<std::vector<std::string>> col;
+    for (int j = 0; j < strdelta[i].size(); j++) {
+      std::vector<std::string> gotostates;
+      std::string str = "";
+      for (int k = 0; k < strdelta[i][j].size(); k++) {
+        if (strdelta[i][j][k] == ',') {
+          gotostates.push_back(str);
+          str = "";
+        } else {
+          str += strdelta[i][j][k];
+        }
+      }
+      gotostates.push_back(str);
+      col.push_back(gotostates);
+    }
+    delta.push_back(col);
   }
   TerminateWindow(1);
   countgood = 1;
@@ -265,9 +247,9 @@ void InitializeDFA() {
   for (int i = 0; i < states.size(); i++) {
     std::vector<std::string> changes;
     for (int j = 0; j < language.size(); j++) {
-      changes.push_back(states[0]);
+      changes.push_back("-1");
     }
-    delta.push_back(changes);
+    strdelta.push_back(changes);
   }
   GetDelta();
 }

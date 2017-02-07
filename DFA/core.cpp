@@ -13,53 +13,6 @@ std::string startingstate = "0";
 std::vector<std::vector<std::string>> delta;
 double countgood = 0, totalcount = 0;
 
-bool SysCheck(std::string str) {
-  /*
-    // Binary number divisible by three
-    int val = 0;
-    for (int i = str.size() - 1; i >= 0; i--) {
-      if (str[i] == '1') {
-        val += pow(2, str.size() - i);
-      }
-    }
-    if (val % 3 == 0) {
-      return (true);
-    }
-    return (false);*/
-  /*
-  // Contains 2 + 0, 1 and no 0101
-  int zc = 0, oc = 0;
-  for (int i = 0; i < str.size(); i++) {
-    if (str[i] == '1') {
-      oc++;
-    } else {
-      zc++;
-    }
-  }
-  if (zc < 2 || oc < 2) {
-    return (false);
-  }
-  for (int i = 0; i < str.size() - 4; i++) {
-    if (str[i] == '0' && str[i + 1] == '1' && str[i + 2] == '0' &&
-        str[i + 3] == '1') {
-      return (true);
-    }
-  }
-  return(false);
-  */
-  ///*
-  //2nd RHS is a '1'
-  for(int i = 0; i < str.size();i++){
-	  if(i == str.size() - 2 && str[i] == '1'){
-		  return(true);
-	  }
-  }
-  return(false);
-  //*/
-
-
-}
-
 int FindStateIndex(std::string str) {
   for (int i = 0; i < states.size(); i++) {
     if (states[i] == str) {
@@ -136,16 +89,6 @@ void Test() {
     } else {
       str += "->FALSE";
     }
-    //if (SysCheck(str) != good) {
-    //  if (good == true) {
-    //    str += ":FALSE";
-    //  } else {
-    //    str += ":TRUE";
-    //  }
-    //  out::SetAtt({out::BOLD});
-    //} else {
-    //  countgood++;
-    //}
     countgood++;
     totalcount++;
     out::Print(str, rowcount, 1);
@@ -156,8 +99,8 @@ void Test() {
 
 void GetDelta() {
   int x = 0, y = 0;
-  int xsize = (scrwidth-10)/language.size();
-  int ysize = (scrheight-10)/states.size();
+  int xsize = (scrwidth - 10) / language.size();
+  int ysize = (scrheight - 10) / states.size();
   int input = 0;
   InitializeWindow();
   windows[1].CreateWindow("Delta Table", scrwidth - 10, scrheight - 10, -1, -1,
@@ -167,12 +110,12 @@ void GetDelta() {
     std::string str = "";
     for (int i = 0; i < language.size(); i++) {
       str += language[i];
-      out::Print(str, 1, (i + 1) * xsize + 1 - (xsize/2), 1);
+      out::Print(str, 1, (i + 1) * xsize + 1 - (xsize / 2), 1);
       str = "";
     }
     for (int i = 0; i < states.size(); i++) {
       str = states[i];
-      out::Print(str, (i + 1) * ysize + 1-(ysize/2), 1, 1);
+      out::Print(str, (i + 1) * ysize + 1 - (ysize / 2), 1, 1);
     }
     for (int i = 0; i < delta.size(); i++) {
       for (int j = 0; j < delta[i].size(); j++) {
@@ -180,7 +123,8 @@ void GetDelta() {
         if (i == y && j == x) {
           out::SetAtt({out::STANDOUT}, 1);
         }
-        out::Print(str, (i + 1) * ysize + 1-(ysize/2), (j + 1) * xsize + 1-(xsize/2), 1);
+        out::Print(str, (i + 1) * ysize + 1 - (ysize / 2),
+                   (j + 1) * xsize + 1 - (xsize / 2), 1);
         if (i == y && j == x) {
           out::SetAtt({out::NORMAL}, 1);
         }
