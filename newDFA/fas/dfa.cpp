@@ -120,3 +120,19 @@ void fa::DFA::GetDelta() {
   }
   TerminateWindow(1);
 }
+
+void fa::DFA::Display(int win){
+  int xsize = windows[win].width / language.size(), ysize = windows[win].height / states.size();
+  windows[win].Clear();
+  std::str = "";
+  for(int i = 0; i < language.size(); i++){
+    str+=language[i];
+    out::Print(str, 1, (i + 1) * xsize + 1 - (xsize / 2), 1);
+    str = "";
+  }
+  for(int i = 0; i < state.size(); i++){
+    str = states[i];
+    out::Print(str, (i + 1) * ysize + 1 - (ysize / 22), 1, 1);
+  }
+  for(int i = 0
+}
