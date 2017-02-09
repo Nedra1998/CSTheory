@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int alphabet[128];
 
@@ -10,6 +11,7 @@ int alphabet[128];
  * void print_trans_table()
  * void construct_trans_table()
  * */
+int get_word_length(char *word) { return (strlen(word)); }
 
 int main(int argc, char *argv[]) {
   char *file_contents;
@@ -23,7 +25,7 @@ int main(int argc, char *argv[]) {
   fclose(input_file);
   file_contents[input_file_size] = '\0';
   char *word = argv[2];
-  char trans_table[100][128];
+  // char trans_table[100][128];
   for (int i = 0; i < 128; i++) {
     alphabet[i] = 0;
   }

@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string>
 int alphabet[128];
+int transtable[100][128];
+std::string word;
+int wordchars = 0;
 
 /*
  * int get_word_length()
@@ -11,6 +14,50 @@ int alphabet[128];
  * void print_trans_table()
  * void construct_trans_table()
  * */
+
+void ConstructTransTable() {
+  for (int i = 0; i < 128; i++) {
+    for (int j = 0; j < wordchars; j++) {
+      if (i == int(' ') || i == int('.') || i == int(',')) {
+        transtable[j][i] = 2;
+      } else {
+        transtable[j][i] = 1;
+      }
+    }
+  }
+}
+
+void LoadWordChars() {
+  for (int i = 0; i < 128; i++) {
+    if (alphabet[i] != 0) {
+      wordchars++;
+    }
+  }
+  wordchars += 1;
+}
+
+void DisplayTransTable() {
+  std::string line = " |";
+  for (int i = 32; i < 128; i++) {
+    if (alphabet[i] != 0) {
+      line += " ";
+      line += char(i);
+    }
+  }
+  printf("%s\n", line.c_str());
+  line = std::string(100, '-');
+  printf("%s\n", line.c_str());
+  for (int i = 0; i < wordchars; i++) {
+    line = "";
+    for (int j = 0; j < 128; j++) {
+      if (alphabet[j] != 0) {
+        line += " ";
+        line += std::to_string(transtable[i][j]);
+      }
+    }
+    printf("%i|%s\n", i, line.c_str());
+  }
+}
 
 int main(int argc, char *argv[]) {
   std::string file_contents;
@@ -20,10 +67,13 @@ int main(int argc, char *argv[]) {
     file.close();
   }
   long int input_file_size = file_contents.size();
-  std::string word = argv[2];
+  word = argv[2];
   for (int i = 0; i < 128; i++) {
     alphabet[i] = 0;
   }
+  alphabet[int(' ')] = -1;
+  alphabet[int('.')] = -1;
+  alphabet[int(',')] = -1;
   for (int i = 0; i < word.size(); i++) {
     alphabet[int(word[i])]++;
   }
@@ -42,6 +92,9 @@ int main(int argc, char *argv[]) {
   printf("\n\n");
 
   // DO STUFF HERE
+  LoadWordChars();
+  ConstructTransTable();
+  DisplayTransTable();
 
   int count = 0;
   // std::string str = "The special word \"" + word + "\" appears %i times.\n";

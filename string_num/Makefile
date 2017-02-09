@@ -3,7 +3,7 @@ cpp:
 	@setterm -fore blue
 	@printf "COMPILING\n"
 	@setterm -fore white
-	clang++ string_num.cpp -o b.out
+	clang++ string_num.cpp -std=c++11 -o b.out
 	@setterm -fore red
 	@printf "TESTING\n"
 	@setterm -fore white
