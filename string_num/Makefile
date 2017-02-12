@@ -18,4 +18,4 @@ c:
 	@setterm -fore red
 	@printf "TESTING\n"
 	@setterm -fore white
-	@./a.out test_file this
+	@./a.out test_file This
