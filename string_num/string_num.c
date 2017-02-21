@@ -1,7 +1,5 @@
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 // Table used to determin which charecters are present in the word
 int alphabet[128];
@@ -16,7 +14,14 @@ int input_file_size;
 int wordcount = 0;
 
 // Used to get the length of the special word
-int GetLength(char *str) { return (strlen(word)); }
+int GetLength(char *str) {
+  //	return (strlen(word)); 
+  int length = 0;
+  while(str[length] != '\0'){
+    length++;
+  }
+  return(length);
+}
 
 // Runs the dfa
 void RunDFA() {
@@ -153,7 +158,7 @@ int main(int argc, char *argv[]) {
     printf("\"");
   }
   printf("\n");
-
+  //Run actual methods to determ word count
   ConstructTransTable();
   DisplayTransTable();
   RunDFA();
